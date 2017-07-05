@@ -11,15 +11,15 @@ import json
 #this data models as main data stream
 global alertList
 alertList = []
-global jsonStr
+global jsonStr_alerts
 jsonData = open('data.JSON')
-jsonStr = jsonData.read()
+jsonStr_alerts = jsonData.read()
 
 
 
 
 
-json1_data = json.loads(jsonStr)
+json1_data = json.loads(jsonStr_alerts)
 
 #user defined constraint
 #expr = "D1.ch2 + D2.ch2 > 6"
@@ -37,7 +37,7 @@ json1_data = json.loads(jsonStr)
 
 
 def find(Df, ch):
-    global jsonStr
+    global jsonStr_alerts
     json1_data = json.loads(jsonStr)
     return (json1_data[str(Df)])[str(ch)]
 
@@ -54,7 +54,7 @@ def compute(exp):
 
 
 def checkConstraint(exp):
-    global jsonStr
+    global jsonStr_alerts
     lock = Lock()
     lock.acquire()
     try:
@@ -76,7 +76,7 @@ def printCon(exp):
 
 
 def checkAlert(alert):
-    while (alert.getState() == "Active"):
+    while (alert.getState()):
         try:
             if (checkConstraint(alert.getConstraint())):
                 print(alert.getTopic(), " is Alerting...")
@@ -117,9 +117,9 @@ def checkingAlerts(Alist):
             print (x.getTopic())
 
 #demo
-obj1 = alert("Alert_1", "find('D1', 'ch2') + find('D2', 'ch2') > 9935", "Active")
-obj2 = alert("Alert_2", "find('D1', 'ch2') + find('D2', 'ch2') > 95", "Active")
-obj3 = alert("Alert_3", "find('D1', 'ch2') + find('D3', 'ch2') < 9935", "Active")
+obj1 = alert("Alert_1", "find('D1', 'ch2') + find('D2', 'ch2') > 9935", True)
+obj2 = alert("Alert_2", "find('D1', 'ch2') + find('D2', 'ch2') > 95", True)
+obj3 = alert("Alert_3", "find('D1', 'ch2') + find('D3', 'ch2') < 9935", True)
 
 
 addAlert(obj1)
